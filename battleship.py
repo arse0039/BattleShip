@@ -256,3 +256,19 @@ class ShipGame:
 
     def get_current_state(self):
         return self._current_state
+
+
+def main():
+    game = ShipGame()
+    game.place_ship('first', 4, 'A1', 'R')
+    game.place_ship('first', 4, 'B5', 'C')
+    game.place_ship('second', 3, 'A1', 'R')
+    game.display_grid('first')
+
+    game.fire_torpedo('first', 'A1')
+    game.fire_torpedo('second', 'A1')
+    game.display_grid('first')
+
+
+if __name__ == '__main__':
+    main()
