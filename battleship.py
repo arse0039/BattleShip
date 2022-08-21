@@ -34,7 +34,7 @@ class Ship:
         """ Repr method to output a cleaner object descriptions when looking at Ship objects stored
         in a player's ship list."""
         orient = "horizontal"
-        if self._orientation == "C":
+        if self._orientation == "V":
             orient = "vertical"
         return f'Ship at {self._coord}: {orient} placement. {self._length} spaces'
 
@@ -43,11 +43,11 @@ class Ship:
         off the ship's starting coordinate, length, and orientation."""
         row_letter = self._coord[:1]
         column_number = int(self._coord[1:])
-        if self._orientation == "R":
+        if self._orientation == "H":
             for i in range(self._length):
                 row_string = f"{row_letter}{(column_number+i)}"
                 self._coord_list.append(row_string)
-        elif self._orientation == "C":
+        elif self._orientation == "V":
             char_num = ord(row_letter)
             for k in range(self._length):
                 col_string = f"{chr(char_num+k)}{column_number}"
@@ -100,13 +100,15 @@ class ShipGame:
         coordinate of the ship placement, and the orientation of the ship. It first verifies that the
         placement is legal. If it is not, it will return False. Otherwise, it updates the visual game
         board, creates a Ship class, and adds the ship object to the player's ship list."""
+        coords = coords.upper()
         starting_index = int(coords[1:])
         starting_row = ord(coords[:1])
+        orientation = orientation.upper()
         max_height = ord("A") + self._grid_size
         if length < 2:
             return False
 
-        if player == "first" and orientation == "R":
+        if player == "first" and orientation == "H":
             potential_coords = [
                 f"{chr(starting_row)}{(starting_index+i)}" for i in range(length)]
             # Check to make sure any of the potential coordinates are not already taken
@@ -127,7 +129,7 @@ class ShipGame:
                     self._player_1_grid[coords[:1]][(
                         starting_index + i)-1] = "|X|"
                 return True
-        if player == "first" and orientation == "C":         # Do it again for the column orientation
+        if player == "first" and orientation == "V":         # Do it again for the column orientation
             potential_coords = [
                 f"{chr(starting_row+i)}{starting_index}" for i in range(length)]
             # Check to make sure any of the potential coordinates are not already taken
@@ -145,7 +147,7 @@ class ShipGame:
                         starting_row + k)][(starting_index)-1] = "|X|"
                 return True
 
-        if player == "second" and orientation == "R":
+        if player == "second" and orientation == "H":
             potential_coords = [
                 f"{chr(starting_row)}{starting_index+i}" for i in range(length)]
             # Check to make sure any of the potential coordinates are not already taken
@@ -163,7 +165,7 @@ class ShipGame:
                     self._player_2_grid[coords[:1]][(
                         starting_index + i)-1] = "|X|"
                 return True
-        if player == "second" and orientation == "C":
+        if player == "second" and orientation == "V":
             potential_coords = [
                 f"{chr(starting_row+i)}{starting_index}" for i in range(length)]
             # Check to make sure any of the potential coordinates are not already taken
@@ -199,7 +201,8 @@ class ShipGame:
         list, update the player's Ship list if the shot sunk a ship, check to see if a player won the game, and FINALLY
         will change the change the player turn. """
         if player != self._player or self._current_state != "UNFINISHED":
-            return False
+            return
+        coord = coord.upper()
         column = int(coord[1:])-1
         row = coord[:1]
         if player == "first":
@@ -220,7 +223,7 @@ class ShipGame:
                     return True
             self._player_2_grid[row][column] = "|o|"
             self.player_switch()
-            return True
+            return False
 
         if player == "second":
             for ships in self._player_1_ships:
@@ -240,7 +243,7 @@ class ShipGame:
                     return True
             self._player_1_grid[row][column] = "|o|"
             self.player_switch()
-            return True
+            return False
 
     def get_num_ships_remaining(self, player):
         """ This is a method that returns the number of remaining ships a player has
@@ -257,17 +260,78 @@ class ShipGame:
     def get_current_state(self):
         return self._current_state
 
+    def get_player(self):
+        return self._player
+
+
+def ship_place(game, player, ship_list):
+    if player == 'first':
+        print('Player 1, place your ships!')
+    else:
+        print('Go ahead, player 2, place your ships!')
+    for ship in ship_list:
+        coordinate = input(
+            f"Place your {ship} at a coordinate between 'A1' and 'J10': ")
+        placement = input(
+            "Choose 'H' for horizontal or 'V' for vertical placement: ")
+        legal_placement = game.place_ship(
+            player, ship_list[ship], coordinate, placement)
+        while legal_placement == False:
+            print('That space is taken! Here is your current board:')
+            game.display_grid('first')
+            print(f"Try placing your {ship} again")
+            coordinate = input(
+                f"Place your {ship} at a coordinate between 'A1' and 'J10': ")
+            placement = input(
+                "Choose 'H' for horizontal or 'V' for vertical placement: ")
+            legal_placement = game.place_ship(
+                player, ship_list[ship], coordinate, placement)
+        game.display_grid(player)
+
+
+def shots_fired(game, ship_list):
+    player = game.get_player()
+    if player == 'first':
+        player_str = 'Player 1'
+    else:
+        player_str = 'Player 2'
+    p1_ships = game.get_num_ships_remaining('first')
+    p2_ships = game.get_num_ships_remaining('second')
+    print(f'\n Let\'s battle! {player_str}, you are up!')
+    shot = input(
+        'Where do you want to fire? Choose a coordinate between A1 and J10!')
+    attempt = game.fire_torpedo(player, shot)
+    print('HIT!') if attempt else print('MISS!')
+    if player == 'first':
+        p2_new = game.get_num_ships_remaining('second')
+        if p2_new < p2_ships:
+            print('SHIP SUNK!')
+    if player == 'second':
+        p1_new = game.get_num_ships_remaining('second')
+        if p1_new < p1_ships:
+            print('SHIP SUNK!')
+
 
 def main():
     game = ShipGame()
-    game.place_ship('first', 4, 'A1', 'R')
-    game.place_ship('first', 4, 'B5', 'C')
-    game.place_ship('second', 3, 'A1', 'R')
-    game.display_grid('first')
+    ship_list = {
+        'patrol boat': 2
+        # 'submarine': 3,
+        # 'destroyer': 4,
+        # 'carrier': 5
+    }
+    player = 'first'
+    ship_place(game, player, ship_list)
+    print('Great job, player 1! Player 2, you\'re up! I hope you didn\'t peek!')
+    player = "second"
+    ship_place(game, player, ship_list)
 
-    game.fire_torpedo('first', 'A1')
-    game.fire_torpedo('second', 'A1')
-    game.display_grid('first')
+    game_state = game.get_current_state()
+    while game_state == 'UNFINISHED':
+        shots_fired(game, ship_list)
+        game_state = game.get_current_state()
+
+    print(game.get_current_state())
 
 
 if __name__ == '__main__':
