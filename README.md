@@ -18,7 +18,7 @@ This method takes a single parameter, the player whose board you wish to display
 
 E.G Board:  (View readMe as raw file to view accurate visual output)
 "    1  2  3  4  5  6  7  8  9  10
-A: |_||_||_||_||_||_||_||_||_||_|
+A: | || || || || || || || || || |
 B: |_||_||_||_||_||_||_||_||_||_|
 C: |_||_||_||_||_||_||_||_||_||_|
 D: |_||_||_||_||_||_||_||_||_||_|
