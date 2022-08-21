@@ -17,7 +17,7 @@ The display_grid() method can be used to display a visual ASCII board in the ter
 This method takes a single parameter, the player whose board you wish to display and prints said board.
 
 E.G Board:  
-    1  2  3  4  5  6  7  8  9  10
+"    1  2  3  4  5  6  7  8  9  10
 A: |_||_||_||_||_||_||_||_||_||_|
 B: |_||_||_||_||_||_||_||_||_||_|
 C: |_||_||_||_||_||_||_||_||_||_|
@@ -28,7 +28,7 @@ G: |_||_||_||_||_||_||_||_||_||_|
 H: |_||_||_||_||_||_||_||_||_||_|
 I: |_||_||_||_||_||_||_||_||_||_|
 J: |_||_||_||_||_||_||_||_||_||_|
-
+"
 'first' player places two ships:
     1  2  3  4  5  6  7  8  9  10
 A: |X||X||X||X||_||_||_||_||_||_|
