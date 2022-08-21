@@ -16,7 +16,7 @@ Once placed, players can fire torpedos at the opponent by calling the fire_torpe
 The display_grid() method can be used to display a visual ASCII board in the terminal for players to track hit's and misses on their own board.
 This method takes a single parameter, the player whose board you wish to display and prints said board.
 
-E.G Board:  
+E.G Board:  (View readMe as raw file to view accurate visual output)
 "    1  2  3  4  5  6  7  8  9  10
 A: |_||_||_||_||_||_||_||_||_||_|
 B: |_||_||_||_||_||_||_||_||_||_|
