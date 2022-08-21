@@ -17,7 +17,7 @@ The display_grid() method can be used to display a visual ASCII board in the ter
 This method takes a single parameter, the player whose board you wish to display and prints said board.
 
 E.G Board:  (View readMe as raw file to view accurate visual output)  
-&nbsp;&nbsp;&nbsp;&nbsp;1&nbsp;&nbsp;2&nbsp;&nbsp;3&nbsp;&nbsp;4&nbsp;&nbsp;5&nbsp;6&nbsp;&nbsp;7&nbsp;&nbsp;8&nbsp;&nbsp;9&nbsp;10  
+&nbsp;&nbsp;&nbsp;&nbsp;1&nbsp;&nbsp;2&nbsp;&nbsp;3&nbsp;&nbsp;4&nbsp;&nbsp;5&nbsp;6&nbsp;&nbsp;7&nbsp;&nbsp;8&nbsp;9&nbsp;10  
 A: [-][-][-][-][-][-][-][-][-][-]  
 B: [-][-][-][-][-][-][-][-][-][-]  
 C: [-][-][-][-][-][-][-][-][-][-]  
